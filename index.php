@@ -19,37 +19,19 @@ catch (PDOException $e)
 	exit;
 }
 
-$sql = "select * from members";
-$stmt = $dbh->query($sql); //sqlを実行
+// query()を使った書き方
+// $sql = "select * from members";
+// $stmt = $dbh->query($sql); //sqlを実行
 
-//
+// プリペアードッステートメントを使った書き方
+// エスケープ処理 プレースホルダ
+$sql = "select * from members";
+$stmt = $dbh->prepare($sql); //この段階ではsqlを実行していない
+$stmt->execute(); //sqlを実行
+
 $row = $stmt->fetchALL(PDO::FETCH_ASSOC); //fetchALL:すべてのレコード、FETCH_ASSOC:連想配列
 
 // var_dump($row);
-// die;
-//
-// array(2)
-// {
-// [0]=> array(4)
-// 	{
-// 		["id"]=> string(1) "1"
-// 		["name"]=> string(6) "suzuki"
-// 		["email"]=> string(18) "suzuki@example.com"
-// 		["password"]=> string(4) "1111"
-// 	}
-// [1]=> array(4)
-// 	{
-// 		["id"]=>
-// 		string(1) "2"
-// 		["name"]=>
-// 		string(6) "tanaka"
-// 		["email"]=>
-// 		string(18) "tanaka@example.com"
-// 		["password"]=>
-// 		string(4) "2222"
-// 	}
-// }
-
 
 foreach ($row as $member)
 {
