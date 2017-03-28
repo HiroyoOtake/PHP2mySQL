@@ -4,10 +4,14 @@
 // PDOクラスを利用する
 // try ~ catch命令
 
+$dsn = 'mysql:host=localhost;dbname=nowall;charset=utf8';
+$user = 'testuser';
+$password = '9999';
+
 try
 {
-	$dbh = new PDO('mysql:host=localhost;dbname=nowall;charset=utf8','testuser','9999');
-	echo '成功しました!';
+	$dbh = new PDO($dsn,$user,$password);
+	// echo '成功しました!';
 }
 catch (PDOException $e)
 {
@@ -15,22 +19,39 @@ catch (PDOException $e)
 	exit;
 }
 
-/* try ~ catch 命令 *
- * try
- * {
- *   // 例外発生する可能性がある処理
- *   }
- *   catch(発生するかもしれない例外の種類 例外を受け取る変数名)
- *   {
- *     // 例外発生時の処理
- *     }
- *
- */
+$sql = "select * from members";
+$stmt = $dbh->query($sql); //sqlを実行
 
-/* PDOクラス *
- *
- * new PDO($dsn, $user, $password);
- * $dsn     : データベース接続用の文字列 mysql:host=localhost;dbname=nowall;charset=utf8;
- * $user    : 接続するときのユーザー名
- * $password: 接続する際のパスワード
- */
+//
+$row = $stmt->fetchALL(PDO::FETCH_ASSOC); //fetchALL:すべてのレコード、FETCH_ASSOC:連想配列
+
+// var_dump($row);
+// die;
+//
+// array(2)
+// {
+// [0]=> array(4)
+// 	{
+// 		["id"]=> string(1) "1"
+// 		["name"]=> string(6) "suzuki"
+// 		["email"]=> string(18) "suzuki@example.com"
+// 		["password"]=> string(4) "1111"
+// 	}
+// [1]=> array(4)
+// 	{
+// 		["id"]=>
+// 		string(1) "2"
+// 		["name"]=>
+// 		string(6) "tanaka"
+// 		["email"]=>
+// 		string(18) "tanaka@example.com"
+// 		["password"]=>
+// 		string(4) "2222"
+// 	}
+// }
+
+
+foreach ($row as $member)
+{
+	echo $member['name'] . 'さん<br>';
+}
