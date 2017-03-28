@@ -19,21 +19,44 @@ catch (PDOException $e)
 	exit;
 }
 
-// query()を使った書き方
-// $sql = "select * from members";
-// $stmt = $dbh->query($sql); //sqlを実行
+/* レコード挿入その1
+$sql = "insert into members (name, email, password) values
+	('ito', 'ito@example.com', '3333')";
+$stmt = $dbh->prepare($sql);
 
-// プリペアードッステートメントを使った書き方
-// エスケープ処理 プレースホルダ
-$sql = "select * from members";
-$stmt = $dbh->prepare($sql); //この段階ではsqlを実行していない
-$stmt->execute(); //sqlを実行
+$stmt->execute();
+ */
 
-$row = $stmt->fetchALL(PDO::FETCH_ASSOC); //fetchALL:すべてのレコード、FETCH_ASSOC:連想配列
+/* レコード挿入その2
+// $sql = "insert into members (name, email, password) values (?, ?, ?)";
+$sql = "insert into members (name, email, password) values (:name, :email, :password)"; // ?でもできるが何が入ってるか分かり辛いのでこっちの書き方でもよい
+$stmt = $dbh->prepare($sql);
 
-// var_dump($row);
+$stmt->execute(
+	array(
+		":name" => "yamada",
+		":email" => "yamada@example.com",
+		":password" => "5555"
+	)
+);
 
-foreach ($row as $member)
-{
-	echo $member['name'] . 'さん<br>';
-}
+echo '成功しました!';
+*/
+
+/* レコード挿入その3 */
+$sql = "insert into members (name, email, password) values (:name, :email, :password)";
+$stmt = $dbh->prepare($sql);
+
+// 値をバインド(代入)する
+// $stmt->bindParam(プレースホルダー,値);
+$stmt->bindParam(":name",$name);
+$stmt->bindParam(":email",$email);
+$stmt->bindParam(":password",$password);
+
+$name = "takahasi";
+$email = "takahashi@example.com";
+$password = "6666";
+
+$stmt->execute();
+		
+echo '成功しました!';
