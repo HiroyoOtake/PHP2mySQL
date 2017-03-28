@@ -11,5 +11,16 @@ $dbh = connectDb();
 // functions.php内の関数でreturnしているので、結果的には下記の表現と同じ扱いになる
 // $dbh = new PDO($dsn, $user, $password);
 
-var_dump($dbh);
-die;
+// var_dump($dbh);
+// die;
+
+$sql = "select * from members";
+$stmt = $dbh->prepare($sql);
+$stmt->execute();
+
+$row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($row as $member)
+{
+	echo $member['name'] . 'さん<br>';
+}
