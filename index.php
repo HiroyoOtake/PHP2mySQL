@@ -24,3 +24,6 @@ foreach ($row as $member)
 {
 	echo $member['name'] . 'さん<br>';
 }
+
+// define('DSN','再定義してみる');
+// すでにfunctionsで定義されている定数なのでエラーがでる
